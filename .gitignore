@@ -1,0 +1,12 @@
+# Build output
+/dist/
+*.exe
+*.test
+*.out
+
+# Screenshots written by the tests (NOPLE_SHOTS=1)
+docs/shots/
+
+# A local workspace over a gowaku checkout
+go.work
+go.work.sum

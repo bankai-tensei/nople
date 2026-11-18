@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- build.sh fills in the version, and the document types that
+     packaging/macos/doctypes prints at the line of their marker.
+     internal/macopen hears the files that Finder hands over. -->
+<plist version="1.0">
+<dict>
+@DOCTYPES@
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Nople</string>
+	<key>CFBundleExecutable</key>
+	<string>nople</string>
+	<key>CFBundleIconFile</key>
+	<string>nople</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.github.bankai-tensei.nople</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Nople</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>@VERSION@</string>
+	<key>CFBundleVersion</key>
+	<string>@VERSION@</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>12.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>See LICENSE</string>
+</dict>
+</plist>

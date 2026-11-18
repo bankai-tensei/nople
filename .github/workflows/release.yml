@@ -1,0 +1,30 @@
+# Builds the macOS package on a Mac of GitHub when a version is tagged, and
+# attaches it to the release of the tag, making the release if there is none
+# yet. The Windows and Linux installers are built with packaging/windows and
+# packaging/linux and attached by hand.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Build the package
+        run: packaging/macos/build.sh "${GITHUB_REF_NAME#v}"
+      - name: Attach it to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --verify-tag --title "Nople ${tag#v}" --notes ""
+          gh release upload "$tag" dist/nople-*-macos-setup.pkg --clobber

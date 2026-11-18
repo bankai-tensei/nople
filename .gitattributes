@@ -1,0 +1,3 @@
+# The scripts of the Linux packages run in sh, which a CR breaks.
+*.sh text eol=lf
+*.desktop text eol=lf

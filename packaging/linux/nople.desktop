@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Nople
+GenericName=Text Editor
+GenericName[ja]=テキストエディター
+Comment=A simple editor for the age of AI
+Comment[ja]=AI 時代のためのシンプルエディター
+Exec=nople %f
+Icon=nople
+Terminal=false
+StartupNotify=true
+StartupWMClass=nople
+Categories=Development;TextEditor;
+Keywords=editor;code;text;markdown;git;
+MimeType=inode/directory;text/plain;text/markdown;text/x-markdown;text/x-log;text/csv;text/tab-separated-values;application/json;application/x-yaml;application/yaml;application/toml;application/xml;text/xml;text/x-go;text/x-python;text/x-python3;text/x-ruby;application/x-ruby;text/x-php;application/x-php;text/x-lua;text/x-perl;application/x-perl;text/javascript;application/javascript;application/x-typescript;text/x-typescript;text/html;text/css;text/x-scss;text/x-sass;text/x-less;text/x-csrc;text/x-chdr;text/x-c++src;text/x-c++hdr;text/x-csharp;text/x-java;text/x-kotlin;text/x-scala;text/x-rust;text/rust;text/x-swift;text/x-dart;text/x-shellscript;application/x-shellscript;text/x-sql;application/sql;text/x-makefile;text/x-cmake;

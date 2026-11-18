@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="27 22 363 155" role="img" aria-label="nople">
+  <title>nople</title>
+  <g fill="none" stroke="#1F1F1F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 45 102 A 28 28 0 0 1 101 102 L 101 130"/>
+    <circle cx="155" cy="102" r="28"/>
+    <circle cx="237" cy="102" r="28"/>
+    <path d="M 321 102 L 377 102 A 28 28 0 1 0 368.8 121.8"/>
+  </g>
+  <rect x="40" y="69" width="10" height="66" rx="5" fill="#1F1F1F"/>
+  <rect x="204" y="69" width="10" height="100" rx="5" fill="#1F1F1F"/>
+  <rect x="288" y="35" width="10" height="100" rx="5" fill="#3B82F6"/>
+</svg>

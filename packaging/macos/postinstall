@@ -1,0 +1,12 @@
+#!/bin/sh
+# Runs as root after the installer has put Nople.app into /Applications, and
+# links the command into /usr/local/bin, so that "nople ." works in a shell.
+# A /usr/local/bin/nople that is not this link is left alone.
+set -eu
+target=/Applications/Nople.app/Contents/MacOS/nople
+link=/usr/local/bin/nople
+mkdir -p /usr/local/bin
+if [ -L "$link" ] || [ ! -e "$link" ]; then
+	ln -sfn "$target" "$link"
+fi
+exit 0

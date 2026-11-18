@@ -1,0 +1,4 @@
+// The resources of nople.exe: the icon that Explorer and the taskbar show for
+// the program. go generate compiles this into rsrc_windows_amd64.syso, which
+// go build links in by itself, without cgo.
+1 ICON "assets/icon.ico"
