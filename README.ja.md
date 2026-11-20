@@ -230,10 +230,10 @@ go test ./...
 
 テストはウィンドウを出さずに UI 全体を動かします。`NOPLE_SHOTS=1` を付けると `docs/shots/` にスクリーンショットを書きます。
 
-コードの構成は [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)（英語）に、速さの測り方は [docs/PERFORMANCE.ja.md](docs/PERFORMANCE.ja.md) にあります。
+コードの構成は [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)（英語）に、速さの測り方は [docs/PERFORMANCE.ja.md](docs/PERFORMANCE.ja.md) にあります。変更を送るときは [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md) を、リリースごとの変更は [CHANGELOG.md](CHANGELOG.md)（英語）を見てください。
 
 ## ライセンス
 
 [MIT](LICENSE)。
 
-ソースファイルのアイコンは Jesse Weed の [Seti UI](https://github.com/jesseweed/seti-ui)（MIT ライセンス）に基づきます。[assets/seti/LICENSE.txt](assets/seti/LICENSE.txt) を参照してください。
+ソースファイルのアイコンは Jesse Weed の [Seti UI](https://github.com/jesseweed/seti-ui)（MIT ライセンス）に基づきます。[assets/seti/LICENSE.txt](assets/seti/LICENSE.txt) を参照してください。Nople が使っているライブラリは [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) にまとめてあります。

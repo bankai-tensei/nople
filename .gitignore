@@ -10,3 +10,10 @@ docs/shots/
 # A local workspace over a gowaku checkout
 go.work
 go.work.sum
+
+# Profiles
+*.prof
+
+# Local tool settings and notes, kept out of the repository
+.claude/
+CLAUDE.md

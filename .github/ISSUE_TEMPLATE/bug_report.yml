@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to make it happen
+      description: The file or folder you opened, and what you did, one step at a time.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS and version (and Wayland or X11 on Linux)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Nople version (nople -version)
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU and driver
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else (input method, screenshots, logs)
