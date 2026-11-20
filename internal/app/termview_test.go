@@ -27,7 +27,8 @@ func TestTerminal_RunsShell(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		h.app.shellCmd = []string{"cmd.exe", "/q", "/k", "prompt $g"}
 	} else {
-		h.app.shellCmd = []string{"/bin/sh"}
+		// The prompt of sh is "$ "; the test waits for "> " on every system.
+		h.app.shellCmd = []string{"/usr/bin/env", "PS1=> ", "/bin/sh", "-i"}
 	}
 	h.app.newTerminal()
 	h.settle()

@@ -625,15 +625,25 @@ func (s *File) WriteLines(w io.Writer, from, to int) error {
 // another goroutine copies the lines it did not edit as they are, breaks
 // included.
 func (s *File) Reader() editor.LineReader {
-	return &reader{o: s.opener(), raw: s.raw, n: s.n, rawEnd: s.rawEnd, size: s.size}
+	r := &reader{o: s.opener(), raw: s.raw, n: s.n, rawEnd: s.rawEnd, size: s.size}
+	if r.o.held != nil {
+		// A copy of the file held open, taken now, while it is open: the
+		// reader may first read after the File closed, as a save that
+		// lands after Close does.
+		r.f, r.err = dup(r.o.held)
+	}
+	return r
 }
 
 // reader reads the lines of a File on another goroutine. raw is the index as
 // it was when the reader was made: the index only grows at its end, so that
 // the part of it the reader knows stays as it was.
 type reader struct {
-	o      opener
+	o opener
+	// f is the file read, opened at the first read, or taken when the
+	// reader was made with err the error of taking it.
 	f      *os.File
+	err    error
 	raw    []int64
 	n      int
 	rawEnd int64
@@ -642,6 +652,9 @@ type reader struct {
 
 // file returns the file the reader reads, opening it the first time.
 func (r *reader) file() (*os.File, error) {
+	if r.err != nil {
+		return nil, r.err
+	}
 	if r.f == nil {
 		f, err := r.o.open()
 		if err != nil {
