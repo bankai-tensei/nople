@@ -1,13 +1,14 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/config"
-	"github.com/bankai-tensei/nople/internal/workspace"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/config"
+	"github.com/bankai-tensei/nople/internal/workspace"
 
 	"github.com/bankai-tensei/gowaku/gowakutest"
 	"github.com/bankai-tensei/gowaku/widgets/editor"
@@ -15,11 +16,10 @@ import (
 
 // harness runs the window of an app in a test.
 type harness struct {
-	t     *testing.T
-	sh    *localShell
-	app   *app
-	tt    *gowakutest.Tester
-	shots bool
+	t   *testing.T
+	sh  *localShell
+	app *app
+	tt  *gowakutest.Tester
 }
 
 // newHarness mounts the window with nothing open.

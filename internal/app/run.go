@@ -6,14 +6,15 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/config"
-	"github.com/bankai-tensei/nople/internal/i18n"
-	"github.com/bankai-tensei/nople/internal/macopen"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/config"
+	"github.com/bankai-tensei/nople/internal/i18n"
+	"github.com/bankai-tensei/nople/internal/macopen"
 
 	"github.com/bankai-tensei/gowaku"
 )

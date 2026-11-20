@@ -12,7 +12,7 @@
 //
 // gowaku's editor did this itself until it took its lines through
 // editor.LineSource (see its docs/ADR/0153, 0155, 0156 and 0157); the
-// behaviour here follows those records.
+// behavior here follows those records.
 package bigfile
 
 import (
@@ -451,9 +451,6 @@ func (s *File) CRLF() bool { return s.crlf }
 
 // BOM reports whether the file starts with the byte order mark of UTF-8.
 func (s *File) BOM() bool { return s.hasBOM }
-
-// groupEnd returns where group g ends in the file.
-func (s *File) groupEnd(g int) int64 { return groupEnd(s.raw, s.n, s.rawEnd, g) }
 
 func groupEnd(raw []int64, n int, rawEnd int64, g int) int64 {
 	if g+1 < len(raw) && (g+1)*groupLines <= n {

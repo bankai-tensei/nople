@@ -1,13 +1,14 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/git"
-	"github.com/bankai-tensei/nople/internal/textfile"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/git"
+	"github.com/bankai-tensei/nople/internal/textfile"
 
 	"github.com/fsnotify/fsnotify"
 
@@ -69,7 +70,9 @@ func (a *app) startWatching() {
 		}
 	}()
 	if a.settingsPath != "" {
-		os.MkdirAll(filepath.Dir(a.settingsPath), 0o755)
+		// If the folder cannot be made, the watch of it fails, and the settings
+		// are not watched.
+		_ = os.MkdirAll(filepath.Dir(a.settingsPath), 0o755) //nolint:errcheck // see above
 		a.watchDir(filepath.Dir(a.settingsPath))
 	}
 	if a.ws != nil {
@@ -86,7 +89,7 @@ func (a *app) startWatching() {
 // stopWatching ends the watch.
 func (a *app) stopWatching() {
 	if a.watch != nil {
-		a.watch.fs.Close()
+		_ = a.watch.fs.Close() //nolint:errcheck // the watch ends either way
 		a.watch = nil
 	}
 }

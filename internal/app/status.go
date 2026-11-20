@@ -2,8 +2,9 @@ package app
 
 import (
 	"fmt"
-	"github.com/bankai-tensei/nople/internal/textfile"
 	"unicode/utf8"
+
+	"github.com/bankai-tensei/nople/internal/textfile"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/widgets/editor"

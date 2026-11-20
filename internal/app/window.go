@@ -1,10 +1,11 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/fileicon"
-	"github.com/bankai-tensei/nople/internal/i18n"
 	"log"
 	"os"
+
+	"github.com/bankai-tensei/nople/internal/fileicon"
+	"github.com/bankai-tensei/nople/internal/i18n"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"
@@ -210,7 +211,8 @@ func (s *windowState) drop(files []string) {
 			continue
 		}
 		if st.IsDir() {
-			a.openFolder(f)
+			// A folder that will not open leaves the window as it was.
+			_ = a.openFolder(f) //nolint:errcheck // see above
 			return
 		}
 	}

@@ -5,6 +5,7 @@ import (
 	"github.com/bankai-tensei/gowaku/input"
 	"github.com/bankai-tensei/gowaku/widgets/interact"
 	"github.com/bankai-tensei/gowaku/widgets/overlay"
+
 	"github.com/bankai-tensei/nople/internal/i18n"
 )
 
@@ -106,7 +107,7 @@ func newActions(a *app) actions {
 		acts.save.OnInvoke = a.saveCurrent
 	}
 	if len(a.dirtyDocs()) > 0 {
-		acts.saveAll.OnInvoke = func() { a.saveAll() }
+		acts.saveAll.OnInvoke = func() { _ = a.saveAll() } //nolint:errcheck // a failure shows in the bar of its tab
 	}
 	acts.settings = interact.Action{Label: T("menu.settings"), Shortcut: shortcut(input.KeyComma, ctrl), OnInvoke: a.openSettingsTab}
 	acts.settingsJSON = interact.Action{Label: T("menu.settingsJSON"), OnInvoke: a.openSettings}
@@ -141,7 +142,7 @@ func (acts actions) all() []interact.Action {
 // menuBar is the menu bar of the window.
 func (acts actions) menuBar() core.Widget {
 	item := func(a interact.Action) overlay.MenuItem { return overlay.MenuItem{Action: a} }
-	var langItems []overlay.MenuItem
+	langItems := make([]overlay.MenuItem, 0, len(acts.languages))
 	for _, l := range acts.languages {
 		langItems = append(langItems, item(l))
 	}

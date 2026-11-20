@@ -1,3 +1,5 @@
+// Package vt reads the output of a program in a terminal, with its VT
+// escapes, into a screen of cells.
 package vt
 
 import (
@@ -14,6 +16,8 @@ import (
 // or 24-bit, by the kind in the top byte.
 type Color uint32
 
+// The kinds of color: the default of the terminal, an index into the
+// palette, or red, green and blue.
 const (
 	ColorDefault Color = 0
 	ColorIndexed Color = 1 << 24
@@ -24,8 +28,15 @@ func indexed(i int) Color { return ColorIndexed | Color(i&0xFF) }
 func rgb(r, g, b int) Color {
 	return ColorRGB | Color(r&0xFF)<<16 | Color(g&0xFF)<<8 | Color(b&0xFF)
 }
-func (c Color) Kind() Color     { return c & 0xFF000000 }
-func (c Color) Value() uint32   { return uint32(c & 0xFFFFFF) }
+
+// Kind is the kind of the color: ColorDefault, ColorIndexed or ColorRGB.
+func (c Color) Kind() Color { return c & 0xFF000000 }
+
+// Value is the index into the palette, or the red, green and blue in the
+// bytes from the top.
+func (c Color) Value() uint32 { return uint32(c & 0xFFFFFF) }
+
+// IsDefault reports whether the color is the default of the terminal.
 func (c Color) IsDefault() bool { return c == ColorDefault }
 
 // Attributes of a cell.
@@ -261,9 +272,10 @@ func (t *Screen) byte(b byte) {
 			t.byte(b)
 		}
 	case stString:
-		if b == 0x1B {
+		switch b {
+		case 0x1B:
 			t.state = stStringEsc
-		} else if b == 0x07 {
+		case 0x07:
 			t.state = stGround
 		}
 	case stStringEsc:

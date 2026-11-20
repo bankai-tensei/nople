@@ -46,7 +46,7 @@ func links(path string) int {
 	if err != nil {
 		return 0
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck // only read
 	var info windows.ByHandleFileInformation
 	if err := windows.GetFileInformationByHandle(windows.Handle(f.Fd()), &info); err != nil {
 		return 0
@@ -57,14 +57,14 @@ func links(path string) int {
 // syncDir does nothing on Windows, where a rename is kept with the file.
 func syncDir(string) {}
 
-// rename renames old to new, trying again for a while when the file is in
+// rename renames from to to, trying again for a while when the file is in
 // use: a virus scanner, the indexer of Windows or a watch of Nople's own may
 // hold it open for a moment, and Windows does not let an open file be
 // replaced.
-func rename(old, new string) error {
+func rename(from, to string) error {
 	var err error
 	for try := 0; try < 40; try++ {
-		if err = os.Rename(old, new); err == nil || !inUse(err) {
+		if err = os.Rename(from, to); err == nil || !inUse(err) {
 			return err
 		}
 		time.Sleep(50 * time.Millisecond)

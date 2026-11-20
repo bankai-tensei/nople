@@ -6,10 +6,10 @@ package assets
 import _ "embed"
 
 var (
-	// LogoLight and LogoDark are the wordmark, in ink for the light theme
-	// and in paper for the dark one.
+	// LogoLight is the wordmark in ink, for the light theme.
 	//go:embed logo.svg
 	LogoLight []byte
+	// LogoDark is the wordmark in paper, for the dark theme.
 	//go:embed logo-dark.svg
 	LogoDark []byte
 	// Icon is the icon of the window, 256 pixels square.

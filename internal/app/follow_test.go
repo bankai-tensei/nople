@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bankai-tensei/gowaku/input"
+
 	"github.com/bankai-tensei/nople/internal/config"
 )
 

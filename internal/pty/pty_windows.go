@@ -38,32 +38,32 @@ func Start(argv []string, dir string, cols, rows int) (*PTY, error) {
 		return nil, err
 	}
 	if err := windows.CreatePipe(&outRead, &ptyOut, nil, 0); err != nil {
-		windows.CloseHandle(ptyIn)
-		windows.CloseHandle(inWrite)
+		_ = windows.CloseHandle(ptyIn)   //nolint:errcheck // the error of CreatePipe is the one to report
+		_ = windows.CloseHandle(inWrite) //nolint:errcheck // the same
 		return nil, err
 	}
 	var hpc windows.Handle
 	size := windows.Coord{X: int16(max(cols, 1)), Y: int16(max(rows, 1))}
 	err := windows.CreatePseudoConsole(size, ptyIn, ptyOut, 0, &hpc)
 	// The console has its own copies of its ends of the pipes.
-	windows.CloseHandle(ptyIn)
-	windows.CloseHandle(ptyOut)
+	_ = windows.CloseHandle(ptyIn)  //nolint:errcheck // nothing to do if a close fails
+	_ = windows.CloseHandle(ptyOut) //nolint:errcheck // the same
 	if err != nil {
-		windows.CloseHandle(inWrite)
-		windows.CloseHandle(outRead)
+		_ = windows.CloseHandle(inWrite) //nolint:errcheck // the error of the console is the one to report
+		_ = windows.CloseHandle(outRead) //nolint:errcheck // the same
 		return nil, err
 	}
 	p := &PTY{hpc: hpc, in: os.NewFile(uintptr(inWrite), "pty-in"), out: os.NewFile(uintptr(outRead), "pty-out")}
 
 	attrs, err := windows.NewProcThreadAttributeList(1)
 	if err != nil {
-		p.Close()
+		_ = p.Close() //nolint:errcheck // it reports no error
 		return nil, err
 	}
 	defer attrs.Delete()
 	// The attribute is the handle itself, not a pointer to it.
 	if err := attrs.Update(windows.PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE, *(*unsafe.Pointer)(unsafe.Pointer(&hpc)), unsafe.Sizeof(hpc)); err != nil {
-		p.Close()
+		_ = p.Close() //nolint:errcheck // it reports no error
 		return nil, err
 	}
 	si := windows.StartupInfoEx{ProcThreadAttributeList: attrs.List()}
@@ -74,23 +74,23 @@ func Start(argv []string, dir string, cols, rows int) (*PTY, error) {
 	si.Flags |= windows.STARTF_USESTDHANDLES
 	line, err := windows.UTF16PtrFromString(commandLine(argv))
 	if err != nil {
-		p.Close()
+		_ = p.Close() //nolint:errcheck // it reports no error
 		return nil, err
 	}
 	var wdir *uint16
 	if dir != "" {
 		if wdir, err = windows.UTF16PtrFromString(dir); err != nil {
-			p.Close()
+			_ = p.Close() //nolint:errcheck // it reports no error
 			return nil, err
 		}
 	}
 	var pi windows.ProcessInformation
 	flags := uint32(windows.EXTENDED_STARTUPINFO_PRESENT | windows.CREATE_UNICODE_ENVIRONMENT)
 	if err := windows.CreateProcess(nil, line, nil, nil, false, flags, nil, wdir, &si.StartupInfo, &pi); err != nil {
-		p.Close()
+		_ = p.Close() //nolint:errcheck // it reports no error
 		return nil, err
 	}
-	windows.CloseHandle(pi.Thread)
+	_ = windows.CloseHandle(pi.Thread) //nolint:errcheck // the thread is not needed, and nothing to do if this fails
 	p.process = pi.Process
 	return p, nil
 }
@@ -131,13 +131,15 @@ func (p *PTY) Close() error {
 		if p.hpc != 0 {
 			windows.ClosePseudoConsole(p.hpc)
 		}
-		p.in.Close()
+		// What is closed here is let go of whatever fails: there is
+		// nothing else to do with it.
+		_ = p.in.Close() //nolint:errcheck // see above
 		if p.process != 0 {
-			windows.TerminateProcess(p.process, 1)
-			windows.CloseHandle(p.process)
+			_ = windows.TerminateProcess(p.process, 1) //nolint:errcheck // the shell may have ended already
+			_ = windows.CloseHandle(p.process)         //nolint:errcheck // see above
 		}
 		// out closes last: closing the console flushes into it.
-		p.out.Close()
+		_ = p.out.Close() //nolint:errcheck // see above
 	})
 	return nil
 }

@@ -1,13 +1,14 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/config"
-	"github.com/bankai-tensei/nople/internal/workspace"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/bankai-tensei/nople/internal/config"
+	"github.com/bankai-tensei/nople/internal/workspace"
 
 	"github.com/bankai-tensei/gowaku/input"
 	"github.com/bankai-tensei/gowaku/semantics"

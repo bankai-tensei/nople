@@ -1,11 +1,12 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/syntax"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/bankai-tensei/nople/internal/syntax"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"

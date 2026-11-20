@@ -1,12 +1,13 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/config"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/config"
 
 	"golang.org/x/text/encoding/japanese"
 

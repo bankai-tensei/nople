@@ -1,9 +1,6 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/bigfile"
-	"github.com/bankai-tensei/nople/internal/syntax"
-	"github.com/bankai-tensei/nople/internal/textfile"
 	"image"
 	_ "image/gif"  // registers GIF with image.Decode
 	_ "image/jpeg" // registers JPEG with image.Decode
@@ -12,6 +9,10 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/bigfile"
+	"github.com/bankai-tensei/nople/internal/syntax"
+	"github.com/bankai-tensei/nople/internal/textfile"
 
 	_ "golang.org/x/image/bmp"  // registers BMP with image.Decode
 	_ "golang.org/x/image/webp" // registers WebP with image.Decode
@@ -181,7 +182,7 @@ func readImage(path string) (*paint.Image, textfile.Content) {
 	if err != nil {
 		return nil, textfile.Content{Err: err}
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck // only read
 	c := textfile.Content{}
 	if st, err := f.Stat(); err == nil {
 		c.Size = st.Size()

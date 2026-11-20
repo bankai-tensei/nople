@@ -62,9 +62,10 @@ func (t *startupTrace) opened(post func(func())) {
 			var m runtime.MemStats
 			runtime.ReadMemStats(&m)
 			if f, err := os.OpenFile(t.path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644); err == nil {
-				fmt.Fprintf(f, "first=%.1fms ready=%.1fms heap=%.1fMB sys=%.1fMB\n",
+				// A trace that fails to write is only a measure lost.
+				_, _ = fmt.Fprintf(f, "first=%.1fms ready=%.1fms heap=%.1fMB sys=%.1fMB\n", //nolint:errcheck // see above
 					ms(t.first), ms(ready), mb(m.HeapInuse), mb(m.Sys))
-				f.Close()
+				_ = f.Close() //nolint:errcheck // see above
 			}
 			gowaku.Quit()
 		})

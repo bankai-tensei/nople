@@ -2,10 +2,11 @@ package app
 
 import (
 	"encoding/json"
-	"github.com/bankai-tensei/nople/internal/config"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/bankai-tensei/nople/internal/config"
 
 	"github.com/bankai-tensei/gowaku/input"
 )

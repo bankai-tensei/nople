@@ -1,3 +1,5 @@
+// Package i18n is the text of the UI in each language Nople ships, and the
+// choice of the language from the settings or the OS.
 package i18n
 
 import (
@@ -118,7 +120,7 @@ func Locale() language.Tag {
 // systemLanguage is the catalog closest to the language of the OS.
 func systemLanguage() string {
 	loadCatalogs()
-	var tags []language.Tag
+	tags := make([]language.Tag, 0, len(catalogs.ids))
 	for _, id := range catalogs.ids {
 		tags = append(tags, catalogs.all[id].locale)
 	}

@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/fileicon"
 	"path/filepath"
+
+	"github.com/bankai-tensei/nople/internal/fileicon"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"

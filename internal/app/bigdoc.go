@@ -36,7 +36,7 @@ func bigContent(path string) (textfile.Content, bool) {
 	if err != nil {
 		return textfile.Content{}, false
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck // only read
 	head := make([]byte, headSize)
 	n, _ := f.Read(head)
 	head = head[:n]
@@ -265,8 +265,9 @@ func (a *app) keepPlaces(d *document, fn func()) {
 		t      *tab
 		scroll editorScroll
 	}
-	var places []place
-	for _, id := range a.tabsOf(d) {
+	ids := a.tabsOf(d)
+	places := make([]place, 0, len(ids))
+	for _, id := range ids {
 		t := a.tabs[id]
 		places = append(places, place{t, editorScroll{t.view.Selection(), t.view.Scroll()}})
 	}

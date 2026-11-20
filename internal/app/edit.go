@@ -3,15 +3,16 @@ package app
 import (
 	"encoding/json"
 	"errors"
-	"github.com/bankai-tensei/nople/internal/config"
-	"github.com/bankai-tensei/nople/internal/i18n"
-	"github.com/bankai-tensei/nople/internal/safewrite"
-	"github.com/bankai-tensei/nople/internal/textfile"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/config"
+	"github.com/bankai-tensei/nople/internal/i18n"
+	"github.com/bankai-tensei/nople/internal/safewrite"
+	"github.com/bankai-tensei/nople/internal/textfile"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/markdown"
@@ -59,7 +60,7 @@ func (a *app) openSettings() {
 	}
 	if _, err := os.Stat(p); errors.Is(err, os.ErrNotExist) {
 		data, _ := json.MarshalIndent(a.settings, "", "\t")
-		os.MkdirAll(filepath.Dir(p), 0o755)
+		_ = os.MkdirAll(filepath.Dir(p), 0o755) //nolint:errcheck // if it fails, so does the write below
 		if err := os.WriteFile(p, append(data, '\n'), 0o644); err != nil {
 			return
 		}
@@ -97,7 +98,7 @@ func (a *app) edited(d *document) {
 	if a.settings.Autosave == config.AutosaveAfterDelay && d.big == nil {
 		a.later(time.Duration(a.settings.AutosaveDelay)*time.Millisecond, func() {
 			if d.editGen == gen && d.dirty && a.isOpen(d) {
-				a.save(d)
+				_ = a.save(d) //nolint:errcheck // a failure shows in the bar of its tab
 			}
 		})
 	}
@@ -222,7 +223,7 @@ func (a *app) saveAllThen(then func(error)) {
 // saveCurrent saves the document of the current tab.
 func (a *app) saveCurrent() {
 	if t := a.currentTab(); t != nil && t.doc.canEdit() {
-		a.save(t.doc)
+		_ = a.save(t.doc) //nolint:errcheck // a failure shows in the bar of its tab
 	}
 }
 
@@ -280,7 +281,7 @@ func (a *app) leaving(id string) {
 		return
 	}
 	if t := a.tabs[id]; t != nil && t.doc.dirty {
-		a.save(t.doc)
+		_ = a.save(t.doc) //nolint:errcheck // a failure shows in the bar of its tab
 	}
 }
 
@@ -377,7 +378,7 @@ func (a *app) tabCloseRequest(id string) bool {
 // for a tab that closes another way.
 func (a *app) closedDirty(d *document) {
 	if a.settings.Autosave != config.AutosaveOff {
-		a.save(d)
+		_ = a.save(d) //nolint:errcheck // a failure shows in the bar of its tab
 		return
 	}
 	a.askSave(d.title(), false, func(then func(error)) { a.saveThen(d, then) }, func(bool) {})

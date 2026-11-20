@@ -6,6 +6,7 @@ import (
 	"github.com/bankai-tensei/gowaku/icons"
 	"github.com/bankai-tensei/gowaku/paint"
 	"github.com/bankai-tensei/gowaku/widgets/basic"
+
 	"github.com/bankai-tensei/nople/internal/fileicon"
 )
 
@@ -19,7 +20,6 @@ var (
 	iconOutline  = outline("M4 6h16 M8 12h12 M8 18h12 M4 12h0.01 M4 18h0.01")
 	iconBranch   = outline("M6 3v12 M6 15a3 3 0 1 0 0 6a3 3 0 1 0 0-6z M18 3a3 3 0 1 0 0 6a3 3 0 1 0 0-6z M18 9a9 9 0 0 1-9 9")
 	iconFolder   = filled("M3 6.5A2.5 2.5 0 0 1 5.5 4H9l2 2h7.5A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z")
-	iconFile     = filled("M6.5 2H14l6 6v12a2 2 0 0 1-2 2H6.5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z")
 	iconHome     = icons.Home()
 )
 

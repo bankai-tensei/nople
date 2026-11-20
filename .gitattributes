@@ -1,3 +1,7 @@
-# The scripts of the Linux packages run in sh, which a CR breaks.
-*.sh text eol=lf
-*.desktop text eol=lf
+# Sources keep LF, also on Windows, so that gofmt and the scripts of the
+# Linux packages, which a CR breaks, see what CI sees.
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.syso binary

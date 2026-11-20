@@ -253,7 +253,7 @@ func (a *app) tabClosed(id string) {
 		}
 		// A large file lets go of its file once nothing waits to save it.
 		if d.big != nil && (!d.dirty || a.settings.Autosave != config.AutosaveOff) {
-			d.big.Close()
+			_ = d.big.Close() //nolint:errcheck // only read
 		}
 	}()
 	delete(a.tabs, id)

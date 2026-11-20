@@ -33,18 +33,19 @@ func Start(argv []string, dir string, cols, rows int) (*PTY, error) {
 	}
 	slave, err := os.OpenFile(slaveName, os.O_RDWR|syscall.O_NOCTTY, 0)
 	if err != nil {
-		master.Close()
+		_ = master.Close() //nolint:errcheck // the error of the start is the one to report
 		return nil, err
 	}
-	defer slave.Close()
-	setSize(master, cols, rows)
+	defer slave.Close() //nolint:errcheck // the shell has its own copy
+	// A size that does not take leaves the terminal at its default size.
+	_ = setSize(master, cols, rows) //nolint:errcheck // see above
 	cmd := exec.Command(argv[0], argv[1:]...)
 	cmd.Dir = dir
 	cmd.Env = append(os.Environ(), "TERM=xterm-256color", "COLORTERM=truecolor")
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true, Ctty: 0}
 	if err := cmd.Start(); err != nil {
-		master.Close()
+		_ = master.Close() //nolint:errcheck // the error of the start is the one to report
 		return nil, err
 	}
 	return &PTY{master: master, cmd: cmd}, nil
@@ -69,7 +70,7 @@ func (p *PTY) Wait() error { return p.cmd.Wait() }
 // Close ends the shell and the terminal.
 func (p *PTY) Close() error {
 	if p.cmd.Process != nil {
-		p.cmd.Process.Signal(syscall.SIGHUP)
+		_ = p.cmd.Process.Signal(syscall.SIGHUP) //nolint:errcheck // the shell may have ended already
 	}
 	return p.master.Close()
 }

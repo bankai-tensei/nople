@@ -119,9 +119,11 @@ func IconFile(dir, ext string) string {
 // cleanLegacy takes out the one ProgID of all the extensions that earlier
 // versions registered.
 func cleanLegacy() {
-	deleteTree(classes + legacyProgID)
+	// What is left of an earlier version does no harm, so a key that will not
+	// go is left.
+	_ = deleteTree(classes + legacyProgID) //nolint:errcheck // see above
 	for _, ext := range Extensions {
-		deleteValue(classes+ext+`\OpenWithProgids`, legacyProgID)
+		_ = deleteValue(classes+ext+`\OpenWithProgids`, legacyProgID) //nolint:errcheck // see above
 	}
 }
 
@@ -160,7 +162,7 @@ func nopleProgIDs() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer k.Close()
+	defer k.Close() //nolint:errcheck // only read
 	names, err := k.ReadSubKeyNames(-1)
 	if err != nil {
 		return nil, err
@@ -181,7 +183,7 @@ func setValues(path string, values map[string]string) error {
 	if err != nil {
 		return err
 	}
-	defer k.Close()
+	defer k.Close() //nolint:errcheck // the values are set by then; closing the handle writes nothing
 	for name, v := range values {
 		if err := k.SetStringValue(name, v); err != nil {
 			return err
@@ -201,7 +203,7 @@ func deleteTree(path string) error {
 		return err
 	}
 	subs, err := k.ReadSubKeyNames(-1)
-	k.Close()
+	_ = k.Close() //nolint:errcheck // only read
 	if err != nil {
 		return err
 	}
@@ -226,7 +228,7 @@ func deleteValue(path, name string) error {
 	if err != nil {
 		return err
 	}
-	defer k.Close()
+	defer k.Close() //nolint:errcheck // the value is deleted by then; closing the handle writes nothing
 	if err := k.DeleteValue(name); err != nil && !errors.Is(err, registry.ErrNotExist) {
 		return err
 	}
@@ -240,9 +242,10 @@ func deleteIfEmpty(path string) {
 		return
 	}
 	info, err := k.Stat()
-	k.Close()
+	_ = k.Close() //nolint:errcheck // only read
 	if err == nil && info.SubKeyCount == 0 && info.ValueCount == 0 {
-		registry.DeleteKey(registry.CURRENT_USER, path)
+		// An empty key that stays does no harm.
+		_ = registry.DeleteKey(registry.CURRENT_USER, path) //nolint:errcheck // see above
 	}
 }
 
@@ -250,5 +253,7 @@ func deleteIfEmpty(path string) {
 // shows them without a restart.
 func assocChanged() {
 	const shcneAssocChanged, shcnfIDList = 0x08000000, 0
-	syscall.NewLazyDLL("shell32.dll").NewProc("SHChangeNotify").Call(shcneAssocChanged, shcnfIDList, 0, 0)
+	// SHChangeNotify returns nothing; without it Explorer shows the change
+	// after a restart.
+	_, _, _ = syscall.NewLazyDLL("shell32.dll").NewProc("SHChangeNotify").Call(shcneAssocChanged, shcnfIDList, 0, 0) //nolint:errcheck // see above
 }

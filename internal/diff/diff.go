@@ -1,3 +1,5 @@
+// Package diff finds where two texts differ, line by line and within a line,
+// for the changes Git shows.
 package diff
 
 import (
@@ -43,11 +45,10 @@ func Lines(a, b []string) []Hunk {
 		suf++
 	}
 	ma, mb := a[pre:len(a)-suf], b[pre:len(b)-suf]
-	var hs []Hunk
-	for _, h := range myers(ma, mb) {
-		h.OldStart += pre
-		h.NewStart += pre
-		hs = append(hs, h)
+	hs := myers(ma, mb)
+	for i := range hs {
+		hs[i].OldStart += pre
+		hs[i].NewStart += pre
 	}
 	return hs
 }

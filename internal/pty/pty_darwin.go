@@ -15,18 +15,19 @@ func openPTY() (*os.File, string, error) {
 	if err != nil {
 		return nil, "", err
 	}
-	fd := uintptr(f.Fd())
-	if _, _, e := unix.Syscall(unix.SYS_IOCTL, fd, unix.TIOCPTYGRANT, 0); e != 0 {
-		f.Close()
-		return nil, "", e
+	fd := f.Fd()
+	if err := unix.IoctlSetInt(int(fd), unix.TIOCPTYGRANT, 0); err != nil {
+		_ = f.Close() //nolint:errcheck // the error of the ioctl is the one to report
+		return nil, "", err
 	}
-	if _, _, e := unix.Syscall(unix.SYS_IOCTL, fd, unix.TIOCPTYUNLK, 0); e != 0 {
-		f.Close()
-		return nil, "", e
+	if err := unix.IoctlSetInt(int(fd), unix.TIOCPTYUNLK, 0); err != nil {
+		_ = f.Close() //nolint:errcheck // the error of the ioctl is the one to report
+		return nil, "", err
 	}
 	var name [128]byte
-	if _, _, e := unix.Syscall(unix.SYS_IOCTL, fd, unix.TIOCPTYGNAME, uintptr(unsafe.Pointer(&name[0]))); e != 0 {
-		f.Close()
+	// x/sys has no wrapper for an ioctl that fills a buffer of the caller.
+	if _, _, e := unix.Syscall(unix.SYS_IOCTL, fd, unix.TIOCPTYGNAME, uintptr(unsafe.Pointer(&name[0]))); e != 0 { //nolint:staticcheck // see above
+		_ = f.Close() //nolint:errcheck // the error of the ioctl is the one to report
 		return nil, "", e
 	}
 	return f, string(name[:bytes.IndexByte(name[:], 0)]), nil

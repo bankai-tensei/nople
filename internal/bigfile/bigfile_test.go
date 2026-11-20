@@ -1,6 +1,7 @@
 package bigfile
 
 import (
+	"errors"
 	"fmt"
 	"math/rand/v2"
 	"os"
@@ -293,7 +294,7 @@ func TestSave_RefusesWhileLoading(t *testing.T) {
 	u := newUI()
 	var ctl editor.Controller
 	d := open(t, &ctl, writeFile(t, numbered(2000)), Options{Post: u.post})
-	if err := d.Save(); err != ErrLoading {
+	if err := d.Save(); !errors.Is(err, ErrLoading) {
 		t.Errorf("Save while loading: %v", err)
 	}
 	u.pump(t, "the end of the index", func() bool { return !d.Loading() })
@@ -401,7 +402,7 @@ func TestSave_RefusesAFileChangedOnDisk(t *testing.T) {
 		ctl.Replace(editor.TextRange{}, "edited ")
 		tc.change(path)
 		disk := readFile(t, path)
-		if err := d.Save(); err != ErrChangedOnDisk {
+		if err := d.Save(); !errors.Is(err, ErrChangedOnDisk) {
 			t.Fatalf("%s: Save over a changed file: %v", tc.name, err)
 		}
 		if readFile(t, path) != disk {
@@ -420,7 +421,7 @@ func TestSave_RefusesAFileChangedOnDisk(t *testing.T) {
 			t.Errorf("%s: SaveAs to another path: %v", tc.name, err)
 		case tc.other && readFile(t, other) != "edited mine\nand more\n" && tc.name == "appended":
 			t.Errorf("%s: saved %q", tc.name, readFile(t, other))
-		case !tc.other && err != ErrChangedOnDisk:
+		case !tc.other && !errors.Is(err, ErrChangedOnDisk):
 			t.Errorf("%s: SaveAs of a rewritten file: %v", tc.name, err)
 		}
 	}
@@ -752,13 +753,13 @@ func TestStartSave_WritesOnAnotherGoroutine(t *testing.T) {
 	if !d.Saving() {
 		t.Fatal("Saving should report the save")
 	}
-	if err := d.Save(); err != ErrSaving {
+	if err := d.Save(); !errors.Is(err, ErrSaving) {
 		t.Errorf("Save while saving: %v", err)
 	}
-	if err := d.StartSaveAs(path, nil, nil); err != ErrSaving {
+	if err := d.StartSaveAs(path, nil, nil); !errors.Is(err, ErrSaving) {
 		t.Errorf("a second StartSaveAs: %v", err)
 	}
-	if err := d.Reload(); err != ErrSaving {
+	if err := d.Reload(); !errors.Is(err, ErrSaving) {
 		t.Errorf("Reload while saving: %v", err)
 	}
 	if got := readFile(t, path); got != content {
@@ -844,7 +845,7 @@ func TestStartSave_LeavesAFileChangedMeanwhile(t *testing.T) {
 	}
 	close(gate)
 	u.pump(t, "the end of the save", func() bool { ended, _ := result(); return ended })
-	if _, err := result(); err != ErrChangedOnDisk {
+	if _, err := result(); !errors.Is(err, ErrChangedOnDisk) {
 		t.Errorf("the save ended with %v, want ErrChangedOnDisk", err)
 	}
 	if got := readFile(t, path); got != content+"another program\n" {
@@ -871,7 +872,7 @@ func TestStartSave_RefusesATextChangedMeanwhile(t *testing.T) {
 	ctl.Replace(editor.TextRange{}, "second ")
 	close(gate)
 	u.pump(t, "the end of the save", func() bool { ended, _ := result(); return ended })
-	if _, err := result(); err != ErrChangedWhileSaving {
+	if _, err := result(); !errors.Is(err, ErrChangedWhileSaving) {
 		t.Errorf("the save ended with %v, want ErrChangedWhileSaving", err)
 	}
 	if got := readFile(t, path); got != content {

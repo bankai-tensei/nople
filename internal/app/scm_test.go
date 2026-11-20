@@ -1,11 +1,12 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/git"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
+
+	"github.com/bankai-tensei/nople/internal/git"
 
 	"github.com/bankai-tensei/gowaku/widgets/editor"
 )

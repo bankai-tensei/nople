@@ -1,10 +1,11 @@
 package app
 
 import (
+	"strings"
+
 	"github.com/bankai-tensei/nople/internal/config"
 	"github.com/bankai-tensei/nople/internal/i18n"
 	"github.com/bankai-tensei/nople/internal/pty"
-	"strings"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"
@@ -88,8 +89,10 @@ func (v settingsView) Build(ctx core.BuildContext) core.Widget {
 	th := basic.ThemeOf(ctx)
 	s := a.settings
 
-	langs := []field.DropdownOption[string]{{Value: "system", Label: T("lang.system")}}
-	for _, id := range i18n.Languages() {
+	ids := i18n.Languages()
+	langs := make([]field.DropdownOption[string], 0, 1+len(ids))
+	langs = append(langs, field.DropdownOption[string]{Value: "system", Label: T("lang.system")})
+	for _, id := range ids {
 		langs = append(langs, field.DropdownOption[string]{Value: id, Label: i18n.Name(id)})
 	}
 	themes := []string{"system", "light", "dark"}

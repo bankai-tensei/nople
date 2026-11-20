@@ -2,9 +2,10 @@ package trash
 
 import (
 	"errors"
-	"github.com/bankai-tensei/nople/internal/i18n"
 	"syscall"
 	"unsafe"
+
+	"github.com/bankai-tensei/nople/internal/i18n"
 
 	"golang.org/x/sys/windows"
 )
