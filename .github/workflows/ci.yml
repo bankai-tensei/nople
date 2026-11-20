@@ -1,0 +1,111 @@
+name: ci
+
+# Every push and pull request runs, so that ok always reports. The jobs that
+# test skip when only docs changed; see changes.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch cancels the run still going.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Whether anything besides Markdown and docs/ changed. A run whose base
+  # cannot be found counts as a change.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: diff
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            echo code=true >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "$BASE" HEAD | grep -qvE '\.md$|^docs/'; then
+            echo code=true >> "$GITHUB_OUTPUT"
+          else
+            echo code=false >> "$GITHUB_OUTPUT"
+          fi
+
+  # The tests run the whole UI without a window, so they need no GPU. Linux
+  # tests under the race detector; Windows without it, as it is slow there and
+  # the races are the same code.
+  test:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            race: -race
+          - os: windows-latest
+            race: ""
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+      - run: go test ${{ matrix.race }} -timeout 20m ./...
+
+  lint:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: test -z "$(gofmt -s -l .)"
+      - uses: golangci/golangci-lint-action@v8
+
+  # The other systems and architectures build, and macOS vets, without cgo.
+  cross:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CGO_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+        env:
+          GOOS: darwin
+          GOARCH: arm64
+      - run: go build ./...
+        env:
+          GOOS: darwin
+          GOARCH: arm64
+      - run: go build ./...
+        env:
+          GOOS: linux
+          GOARCH: arm64
+      - run: go build ./...
+        env:
+          GOOS: windows
+          GOARCH: arm64
+
+  # The one check that branch protection requires. It passes when every job
+  # passed or was skipped, so that a pull request of docs alone can merge.
+  ok:
+    if: always()
+    needs: [changes, test, lint, cross]
+    runs-on: ubuntu-latest
+    steps:
+      - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - run: echo ok

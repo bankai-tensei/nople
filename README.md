@@ -230,10 +230,10 @@ go test ./...
 
 The tests run the whole UI without a window. Set `NOPLE_SHOTS=1` to have them write screenshots to `docs/shots/`.
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the code is laid out, and [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for how its speed is measured.
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the code is laid out, and [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for how its speed is measured. To send a change, see [CONTRIBUTING.md](CONTRIBUTING.md); what changed in each release is in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
 [MIT](LICENSE).
 
-The source-file icons are derived from [Seti UI](https://github.com/jesseweed/seti-ui) by Jesse Weed, under the MIT License; see [assets/seti/LICENSE.txt](assets/seti/LICENSE.txt).
+The source-file icons are derived from [Seti UI](https://github.com/jesseweed/seti-ui) by Jesse Weed, under the MIT License; see [assets/seti/LICENSE.txt](assets/seti/LICENSE.txt). The libraries Nople is built with are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

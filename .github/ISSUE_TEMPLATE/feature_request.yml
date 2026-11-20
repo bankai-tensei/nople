@@ -1,0 +1,17 @@
+name: Feature request
+description: Something Nople could do to help you read and check code.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: Nople leaves out extensions, debugging, AI features, LSP and Git writes on purpose; see "What Nople leaves out" in the README.
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you want to do, and what stops you today?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: How you imagine it (optional)
