@@ -154,7 +154,7 @@ nople -register
 |---|---|
 | `theme` | `system`、`light`、`dark` |
 | `shell` | 新しいターミナルのコマンドライン。空なら、Windows では PowerShell 7、無ければ Windows PowerShell、ほかでは `$SHELL` |
-| `language` | `system`、`en`、`ja`。UI の言語は JSON を 1 つ足せば増やせる（[手順](internal/i18n/locales/README.md)） |
+| `language` | `system`、`en`、`ja`。`system` は OS に従う（環境変数 `NOPLE_LANG` があればそれに従う）。UI の言語は JSON を 1 つ足せば増やせる（[手順](internal/i18n/locales/README.md)） |
 | `autosave` | `afterDelay`（打ち終えて `autosaveDelay` ミリ秒）、`onFocusChange`、`off`。`off` のときは、未保存のファイルを閉じる前に確認する |
 | `gitignore` | `true` なら、`.gitignore` で無視されたものをエクスプローラーとクイックオープン、検索に出さない。`false`（既定）ならすべて出す。`.git` はどちらでも隠す |
 

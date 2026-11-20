@@ -154,7 +154,7 @@ It writes only to the registry of the current user (`HKEY_CURRENT_USER`), so it 
 |---|---|
 | `theme` | `system`, `light`, `dark` |
 | `shell` | The command line of new terminals. Empty picks PowerShell 7, then Windows PowerShell on Windows, and `$SHELL` elsewhere |
-| `language` | `system`, `en`, `ja`. Adding a UI language is adding one JSON file ([how](internal/i18n/locales/README.md)) |
+| `language` | `system`, `en`, `ja`. `system` follows the OS, or the `NOPLE_LANG` environment variable when it is set. Adding a UI language is adding one JSON file ([how](internal/i18n/locales/README.md)) |
 | `autosave` | `afterDelay` (`autosaveDelay` ms after you stop typing), `onFocusChange`, `off`. With `off`, Nople asks before closing unsaved files |
 | `gitignore` | `true` leaves what `.gitignore` ignores out of the explorer, quick open and search. `false` (the default) shows everything. `.git` stays hidden either way |
 

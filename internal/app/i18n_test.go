@@ -12,8 +12,10 @@ import (
 )
 
 // TestMain runs the tests in Japanese, which they look for on screen,
-// whatever the language of the machine.
+// whatever the language of the machine, also when they read the settings
+// again, which follow the system.
 func TestMain(m *testing.M) {
+	os.Setenv("NOPLE_LANG", "ja")
 	i18n.Set("ja")
 	os.Exit(m.Run())
 }
