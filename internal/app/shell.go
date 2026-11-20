@@ -44,8 +44,13 @@ func (*gowakuShell) async(work func() func()) {
 	}()
 }
 
-func (*gowakuShell) fileDialog(d gowaku.FileDialog, done func([]string, error)) {
-	gowaku.ShowFileDialog(d, done)
+// fileDialog shows the dialog in front of the window, which a build told.
+func (s *gowakuShell) fileDialog(d gowaku.FileDialog, done func([]string, error)) {
+	if s.window == nil {
+		done(nil, gowaku.ErrNoFileDialog)
+		return
+	}
+	s.window.ShowFileDialog(d, done)
 }
 
 func (s *gowakuShell) setTitle(ctx core.BuildContext, title string) {

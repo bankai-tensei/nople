@@ -4,10 +4,10 @@ github.com/alecthomas/chroma/v2 v2.27.0 h1:FodwmyOBgJULFYmDqibcp9pvfDLWdtPRh9v/r
 github.com/alecthomas/chroma/v2 v2.27.0/go.mod h1:NjJ3ciIgrqBNeIkWZ4e46nseoLDslxU1LmfCoL+wcY8=
 github.com/alecthomas/repr v0.5.2 h1:SU73FTI9D1P5UNtvseffFSGmdNci/O6RsqzeXJtP0Qs=
 github.com/alecthomas/repr v0.5.2/go.mod h1:Fr0507jx4eOXV7AlPV6AVZLYrLIuIeSOWtW57eE/O/4=
-github.com/bankai-tensei/gowaku v0.1.0 h1:S+l7dQd37SO0SIx8CLFEk5hW0IeMfgpF2YwVnldPNjs=
-github.com/bankai-tensei/gowaku v0.1.0/go.mod h1:kDHrB5dZz2NsnTZ2e10/el/StqPf5UUnn8MdUny4nvQ=
-github.com/bankai-tensei/gowaku/markdown v0.1.0 h1:IiCbYGHas36BF5jHJBx1Sp4yqUJJAqW+9Ph0TQQp51U=
-github.com/bankai-tensei/gowaku/markdown v0.1.0/go.mod h1:G5fRTroGZbZcqmAEPOSxYT3/zy3XBMbwPcj74h89suo=
+github.com/bankai-tensei/gowaku v0.2.0 h1:AHmmFBOHrz7sES+xakTyoOLa3yDwx0f2l++pX/Qv2aE=
+github.com/bankai-tensei/gowaku v0.2.0/go.mod h1:kDHrB5dZz2NsnTZ2e10/el/StqPf5UUnn8MdUny4nvQ=
+github.com/bankai-tensei/gowaku/markdown v0.2.0 h1:ftMMv3sxMlpfossMsYjiojDCusFucrSAj0YGbJilC+U=
+github.com/bankai-tensei/gowaku/markdown v0.2.0/go.mod h1:sN+wk7Gwkd3tiiCzmzMjFwpgcvzMSVqAL1znFOBSyBA=
 github.com/dlclark/regexp2/v2 v2.2.1 h1:mf4KkFUj0gJuarK8P+LgiS+Lit7m9N1yAwEfPbee7R0=
 github.com/dlclark/regexp2/v2 v2.2.1/go.mod h1:avUrQvPaLz2DrFNHJF0taWAFFX2C1GMSSoeiqFjcBmU=
 github.com/ebitengine/purego v0.11.3 h1:OB+JLpdm7ioymhyA+6s5kbb/uOuYycAgL8NNTFc5MLg=
