@@ -3,10 +3,11 @@ package app
 import (
 	"errors"
 	"fmt"
-	"github.com/bankai-tensei/nople/internal/textfile"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/bankai-tensei/nople/internal/textfile"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"
@@ -106,7 +107,7 @@ func notice(a *app, t *tab) control.InfoBar {
 		return control.InfoBar{
 			Open: true, Severity: control.SeverityError,
 			Title: T("doc.saveFailed"), Message: t.doc.saveErr.Error(),
-			Action: T("doc.saveAgain"), OnAction: func() { a.save(t.doc) },
+			Action: T("doc.saveAgain"), OnAction: func() { _ = a.save(t.doc) }, //nolint:errcheck // a failure shows in the bar of its tab
 		}
 	case t.doc.conflict:
 		detail := T("doc.conflictDetail")

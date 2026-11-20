@@ -59,9 +59,6 @@ type fieldSpan struct {
 	quoted     bool
 }
 
-// isSheetPath reports whether the file at path shows as a table.
-func isSheetPath(path string) bool { return sheetSeparator(path) != 0 }
-
 // lineBreakMark stands for a line break inside a field.
 const lineBreakMark = " ↵ "
 
@@ -207,7 +204,7 @@ func thousands(s string) bool {
 	s = strings.TrimLeft(s, "+-")
 	whole, _, _ := strings.Cut(s, ".")
 	groups := strings.Split(whole, ",")
-	if len(groups[0]) == 0 || len(groups[0]) > 3 {
+	if groups[0] == "" || len(groups[0]) > 3 {
 		return false
 	}
 	for _, g := range groups[1:] {

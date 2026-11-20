@@ -15,12 +15,12 @@ func openPTY() (*os.File, string, error) {
 		return nil, "", err
 	}
 	if err := unix.IoctlSetPointerInt(int(f.Fd()), unix.TIOCSPTLCK, 0); err != nil {
-		f.Close()
+		_ = f.Close() //nolint:errcheck // the error of the ioctl is the one to report
 		return nil, "", err
 	}
 	n, err := unix.IoctlGetInt(int(f.Fd()), unix.TIOCGPTN)
 	if err != nil {
-		f.Close()
+		_ = f.Close() //nolint:errcheck // the error of the ioctl is the one to report
 		return nil, "", err
 	}
 	return f, "/dev/pts/" + strconv.Itoa(n), nil

@@ -200,7 +200,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	os.Stdout.Write(src)
+	if _, err := os.Stdout.Write(src); err != nil {
+		log.Fatal(err)
+	}
 }
 
 // glyphPath is the outline of the glyph r as SVG path data, in the middle of

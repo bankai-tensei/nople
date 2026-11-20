@@ -2,14 +2,16 @@ package app
 
 import (
 	"fmt"
-	"github.com/bankai-tensei/gowaku/core"
-	"github.com/bankai-tensei/nople/internal/config"
-	"github.com/bankai-tensei/nople/internal/git"
-	"github.com/bankai-tensei/nople/internal/workspace"
 	"os"
 	"path/filepath"
 	"slices"
 	"time"
+
+	"github.com/bankai-tensei/gowaku/core"
+
+	"github.com/bankai-tensei/nople/internal/config"
+	"github.com/bankai-tensei/nople/internal/git"
+	"github.com/bankai-tensei/nople/internal/workspace"
 
 	"github.com/bankai-tensei/gowaku"
 	"github.com/bankai-tensei/gowaku/widgets/collection"
@@ -203,7 +205,8 @@ func (a *app) openFolderDialog() {
 		if err != nil || len(paths) == 0 {
 			return
 		}
-		a.openFolder(paths[0])
+		// A folder that will not open leaves the window as it was.
+		_ = a.openFolder(paths[0]) //nolint:errcheck // see above
 	})
 }
 

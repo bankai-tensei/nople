@@ -2,13 +2,14 @@ package app
 
 import (
 	"bytes"
-	"github.com/bankai-tensei/nople/assets"
 	"image"
 	"image/png"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/bankai-tensei/nople/assets"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"

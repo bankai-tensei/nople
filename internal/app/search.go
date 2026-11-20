@@ -2,14 +2,15 @@ package app
 
 import (
 	"fmt"
-	"github.com/bankai-tensei/nople/internal/textfile"
-	"github.com/bankai-tensei/nople/internal/workspace"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync/atomic"
 	"unicode/utf8"
+
+	"github.com/bankai-tensei/nople/internal/textfile"
+	"github.com/bankai-tensei/nople/internal/workspace"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"

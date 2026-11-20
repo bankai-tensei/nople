@@ -1,13 +1,16 @@
+// Package git reads the Git repository of the open folder by running git:
+// the branch and the files that changed.
 package git
 
 import (
 	"bytes"
 	"errors"
-	"github.com/bankai-tensei/nople/internal/sysutil"
 	"os/exec"
 	"path/filepath"
 	"slices"
 	"strings"
+
+	"github.com/bankai-tensei/nople/internal/sysutil"
 )
 
 // Repo is the Git repository the open folder is in, as git last told.

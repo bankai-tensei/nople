@@ -2,7 +2,6 @@ package app
 
 import (
 	"bytes"
-	"github.com/bankai-tensei/nople/internal/textfile"
 	"image"
 	"image/color"
 	"image/png"
@@ -10,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/bankai-tensei/nople/internal/textfile"
 
 	"golang.org/x/text/encoding/japanese"
 

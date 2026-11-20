@@ -2,14 +2,15 @@ package app
 
 import (
 	"fmt"
-	"github.com/bankai-tensei/nople/internal/pty"
-	"github.com/bankai-tensei/nople/internal/vt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/bankai-tensei/nople/internal/pty"
+	"github.com/bankai-tensei/nople/internal/vt"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"
@@ -177,7 +178,9 @@ func (a *app) termClosed(id string) {
 	t.exited = true
 	close(t.input)
 	if t.pty != nil {
-		go t.pty.Close()
+		p := t.pty
+		// The shell is gone either way; nothing is left to do if this fails.
+		go func() { _ = p.Close() }() //nolint:errcheck // see above
 	}
 	a.refresh()
 }
@@ -188,7 +191,7 @@ func (a *app) closeTerminals() {
 		t := a.terms[id]
 		a.termClosed(id)
 		if t.pty != nil {
-			t.pty.Close()
+			_ = t.pty.Close() //nolint:errcheck // the window is closing; nothing is left to do if this fails
 		}
 	}
 }
@@ -418,7 +421,8 @@ func (r *renderTerm) Layout(c geom.Constraints) geom.Size {
 			r.term.vt.Resize(cols, rows)
 			r.term.back = min(r.term.back, len(r.term.vt.Scrollback))
 			if p := r.term.pty; p != nil && !r.term.exited {
-				go p.Resize(cols, rows)
+				// A size that does not take leaves the shell at the old one.
+				go func(cols, rows int) { _ = p.Resize(cols, rows) }(cols, rows) //nolint:errcheck // see above
 			}
 		}
 	}
@@ -493,7 +497,6 @@ func (r *renderTerm) Paint(cv *paint.Canvas, off geom.Offset) {
 			w := l.Size().W
 			cv.DrawRRect(geom.RRectAll(geom.Rect{X: cx, Y: cy, W: w, H: r.cellH}, 0), paint.Paint{Color: cols.bg})
 			for _, run := range l.Runs() {
-				run := run
 				cv.DrawGlyphs(&run, geom.Offset{X: cx, Y: cy + r.ascent - run.Origin.Y + run.Origin.Y}, cols.fg)
 			}
 			cv.DrawRRect(geom.RRectAll(geom.Rect{X: cx, Y: cy + r.cellH - 2, W: w, H: 1}, 0), paint.Paint{Color: cols.cursor})

@@ -18,6 +18,7 @@ const MaxSize = 4 << 20
 // Kind is what a stretch of code is, which decides its color.
 type Kind uint8
 
+// The kinds of code. KindNone is text that is none of the others.
 const (
 	KindNone Kind = iota
 	KindComment

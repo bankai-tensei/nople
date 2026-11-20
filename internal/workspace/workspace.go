@@ -1,3 +1,5 @@
+// Package workspace is the folder that is open: its files and folders as
+// the explorer reads them, and the .gitignore rules that leave some out.
 package workspace
 
 import (
@@ -44,7 +46,7 @@ func New(root string, gitignore bool) *Workspace {
 // Name is what the explorer calls the workspace.
 func (w *Workspace) Name() string { return filepath.Base(w.Root) }
 
-// rel returns path relative to the root, with slashes.
+// Rel returns path relative to the root, with slashes.
 func (w *Workspace) Rel(path string) string {
 	r, err := filepath.Rel(w.Root, path)
 	if err != nil || r == "." {

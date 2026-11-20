@@ -18,7 +18,7 @@ func keepOwner(tmp *os.File, st os.FileInfo) {
 }
 
 // keepAttributes does nothing here: the mode is all there is.
-func keepAttributes(tmp, target string) {}
+func keepAttributes(_, _ string) {}
 
 // links returns the number of hard links of the file at path, or 0.
 func links(path string) int {
@@ -35,10 +35,10 @@ func links(path string) int {
 // syncDir syncs the folder dir, so that the rename is on the disk too.
 func syncDir(dir string) {
 	if d, err := os.Open(dir); err == nil {
-		_ = d.Sync() //nolint:errcheck // the file itself is synced; this is the name
+		_ = d.Sync()  //nolint:errcheck // the file itself is synced; this is the name
 		_ = d.Close() //nolint:errcheck // only read
 	}
 }
 
-// rename renames old to new; a file held open can be renamed over here.
-func rename(old, new string) error { return os.Rename(old, new) }
+// rename renames from to to; a file held open can be renamed over here.
+func rename(from, to string) error { return os.Rename(from, to) }

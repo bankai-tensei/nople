@@ -273,7 +273,7 @@ func (d *Doc) Saving() bool { return d.saving != nil }
 // it is.
 var progressEvery = 100 * time.Millisecond
 
-// HoldSave, when not nil, runs on the goroutine of a save that StartSaveAs
+// HoldSave runs, when not nil, on the goroutine of a save that StartSaveAs
 // began, before it writes. Tests set it to keep a save running while they
 // look at the window.
 var HoldSave func()
@@ -356,15 +356,16 @@ func (d *Doc) finishSave(j *saveJob, snap *editor.Snapshot, err error, done func
 		// The file was not watched while the save ran.
 		err = j.check()
 	}
-	if err != nil {
+	switch {
+	case err != nil:
 		safewrite.Abort(j.tmp)
 		if !d.closed {
 			d.Check()
 		}
-	} else if d.closed {
+	case d.closed:
 		// Closed while it saved: the save still lands, and nothing shows it.
 		err = safewrite.Commit(j.tmp, j.path)
-	} else {
+	default:
 		err = d.commit(j)
 	}
 	if done != nil {

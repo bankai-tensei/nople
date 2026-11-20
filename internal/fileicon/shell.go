@@ -70,7 +70,7 @@ func ShellIcon(ext string) []byte {
 			continue
 		}
 		var buf bytes.Buffer
-		png.Encode(&buf, pic)
+		_ = png.Encode(&buf, pic) //nolint:errcheck // an RGBA into a bytes.Buffer does not fail
 		pics[i] = buf.Bytes()
 	}
 	return ico(shellSizes, pics)
@@ -98,17 +98,17 @@ func MacIcon(ext string) []byte {
 		pic, ok := pngs[t.n]
 		if !ok {
 			var buf bytes.Buffer
-			png.Encode(&buf, shellPicture(t.n, glyph, c))
+			_ = png.Encode(&buf, shellPicture(t.n, glyph, c)) //nolint:errcheck // an RGBA into a bytes.Buffer does not fail
 			pic = buf.Bytes()
 			pngs[t.n] = pic
 		}
 		body.WriteString(t.typ)
-		binary.Write(&body, binary.BigEndian, uint32(8+len(pic)))
+		_ = binary.Write(&body, binary.BigEndian, uint32(8+len(pic))) //nolint:errcheck // a bytes.Buffer does not fail
 		body.Write(pic)
 	}
 	var out bytes.Buffer
 	out.WriteString("icns")
-	binary.Write(&out, binary.BigEndian, uint32(8+body.Len()))
+	_ = binary.Write(&out, binary.BigEndian, uint32(8+body.Len())) //nolint:errcheck // a bytes.Buffer does not fail
 	out.Write(body.Bytes())
 	return out.Bytes()
 }
@@ -195,7 +195,8 @@ func dib(img *image.RGBA) []byte {
 	n := img.Bounds().Dx()
 	maskRow := (n + 31) / 32 * 4
 	var buf bytes.Buffer
-	binary.Write(&buf, binary.LittleEndian, struct {
+	// A bytes.Buffer does not fail, nor a struct of fixed size.
+	_ = binary.Write(&buf, binary.LittleEndian, struct { //nolint:errcheck // see above
 		Size                  uint32
 		Width, Height         int32
 		Planes, Bits          uint16
@@ -225,14 +226,15 @@ func unpremultiply(v, a uint8) uint8 { return uint8(min(255, (int(v)*255+int(a)/
 func ico(sizes []int, pics [][]byte) []byte {
 	var buf bytes.Buffer
 	le := binary.LittleEndian
-	binary.Write(&buf, le, [3]uint16{0, 1, uint16(len(pics))})
+	// A bytes.Buffer does not fail, nor values of fixed size.
+	_ = binary.Write(&buf, le, [3]uint16{0, 1, uint16(len(pics))}) //nolint:errcheck // see above
 	offset := 6 + 16*len(pics)
 	for i, n := range sizes {
 		side := uint8(n)
 		if n >= 256 {
 			side = 0
 		}
-		binary.Write(&buf, le, struct {
+		_ = binary.Write(&buf, le, struct { //nolint:errcheck // see above
 			W, H, Colors, Reserved uint8
 			Planes, Bits           uint16
 			Size, Offset           uint32

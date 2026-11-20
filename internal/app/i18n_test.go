@@ -1,13 +1,14 @@
 package app
 
 import (
-	"github.com/bankai-tensei/nople/internal/i18n"
 	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/bankai-tensei/nople/internal/i18n"
 )
 
 // TestMain runs the tests in Japanese, which they look for on screen,

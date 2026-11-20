@@ -2,11 +2,12 @@ package app
 
 import (
 	"errors"
+	"path/filepath"
+
 	"github.com/bankai-tensei/nople/internal/diff"
 	"github.com/bankai-tensei/nople/internal/git"
 	"github.com/bankai-tensei/nople/internal/syntax"
 	"github.com/bankai-tensei/nople/internal/textfile"
-	"path/filepath"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"
@@ -86,12 +87,12 @@ func (a *app) startMarks(d *document) {
 		d.marks = nil
 		return
 	}
-	text := d.ctrl.Text()
+	cur := d.ctrl.Text()
 	a.shell.async(func() func() {
 		old, ok := r.Show("", d.path)
 		var m *marks
 		if ok {
-			m = changeMarks(diff.Split(old), diff.Split(text))
+			m = changeMarks(diff.Split(old), diff.Split(cur))
 		}
 		return func() {
 			if a.repo == r {
@@ -353,7 +354,7 @@ func diffView(th *theme.Theme, a *app, t *tab) core.Widget {
 			// The added and deleted lines are tinted across the whole width,
 			// empty ones included (PLAN §5 #18); what changed in a line
 			// shows darker on top.
-			LineStyle: func(i int, s string) editor.LineStyle {
+			LineStyle: func(i int, _ string) editor.LineStyle {
 				if i < len(kind) && kind[i] {
 					return editor.LineStyle{Background: tint(c, lineA)}
 				}

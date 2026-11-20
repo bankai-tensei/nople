@@ -62,7 +62,7 @@ func Read(path string, force bool) Content {
 	if err != nil {
 		return Content{Err: err}
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck // only read
 	st, err := f.Stat()
 	if err != nil {
 		return Content{Err: err}

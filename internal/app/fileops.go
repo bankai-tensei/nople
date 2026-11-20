@@ -3,12 +3,13 @@ package app
 import (
 	"errors"
 	"fmt"
-	"github.com/bankai-tensei/nople/internal/trash"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/bankai-tensei/nople/internal/trash"
 
 	"github.com/bankai-tensei/gowaku/core"
 	"github.com/bankai-tensei/gowaku/geom"
@@ -361,11 +362,11 @@ func (a *app) trashPaths(paths []string) error {
 	var errs []string
 	var dirs []string
 	for _, p := range paths {
-		trash := trash.Move
+		move := trash.Move
 		if a.trash != nil {
-			trash = a.trash
+			move = a.trash
 		}
-		if err := trash(p); err != nil {
+		if err := move(p); err != nil {
 			errs = append(errs, filepath.Base(p)+": "+err.Error())
 			continue
 		}

@@ -1,13 +1,15 @@
 package app
 
 import (
-	"github.com/bankai-tensei/gowaku/widgets/field"
-	"github.com/bankai-tensei/nople/internal/workspace"
 	"path"
 	"path/filepath"
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/bankai-tensei/gowaku/widgets/field"
+
+	"github.com/bankai-tensei/nople/internal/workspace"
 )
 
 // Limits of quick open.

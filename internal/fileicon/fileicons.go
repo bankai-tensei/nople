@@ -50,7 +50,6 @@ var (
 	kindTest     = fileKind{glyph: "M10.75 11h3 M11.25 11v3.25l-3.25 4.75h8.5l-3.25-4.75V11"}
 	kindBinary   = fileKind{glyph: "M8.5 12v6 M11.5 12h2.5v6h-2.5z M16.5 12v6"}
 	kindPDF      = fileKind{glyph: "M8 10h6l3 3v7.5H8z M14 10v3h3 M10 16h5 M10 18.5h5"}
-	kindPlain    = fileKind{}
 )
 
 // fileType is what a file is: its kind and the color of its page.
@@ -168,7 +167,8 @@ var typesByName = map[string]fileType{
 	".dockerignore": {kindConfig, colDocker}, ".editorconfig": {kindConfig, colText},
 	".prettierrc": {kindConfig, colText}, ".eslintrc": {kindConfig, colText}, ".npmrc": {kindConfig, colText},
 	"license": {kindLicense, colLicense}, "license.md": {kindLicense, colLicense}, "license.txt": {kindLicense, colLicense},
-	"licence": {kindLicense, colLicense}, "copying": {kindLicense, colLicense}, "notice": {kindLicense, colLicense},
+	"licence": {kindLicense, colLicense}, //nolint:misspell // the name of a file, as some projects spell it
+	"copying": {kindLicense, colLicense}, "notice": {kindLicense, colLicense},
 	"claude.md": {kindInfo, colInfo}, "agents.md": {kindInfo, colInfo}, "changelog.md": {kindInfo, colInfo}, "contributing.md": {kindInfo, colInfo},
 }
 
