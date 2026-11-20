@@ -233,7 +233,7 @@ func TestSheet_DarkAndWide(t *testing.T) {
 	for i := range 200 {
 		b.WriteString(strings.Join([]string{
 			strconv.Itoa(i + 1), "ユーザー " + strconv.Itoa(i), "user" + strconv.Itoa(i) + "@example.com", "横浜", "Japan",
-			strconv.Itoa(i * 37 % 1000), strconv.Itoa(i%10 + 1), "2026-11-18", "Pro", "とても長いメモがここに入ります。列の幅には上限があります。",
+			strconv.Itoa(i * 37 % 1000), strconv.Itoa(i%10 + 1), "2026-11-18", "Pro", "とても長いメモがここに入ります。列の幅には上限があります。 A note long enough to reach the bound of a column, also where no Japanese font is there to measure the words above.",
 			"35.4437", "139.6380",
 		}, "\t") + "\n")
 	}
