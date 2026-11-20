@@ -5,6 +5,7 @@ package git
 import (
 	"bytes"
 	"errors"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"slices"
@@ -74,12 +75,7 @@ func Read(dir string) (*Repo, error) {
 		}
 		return nil, nil
 	}
-	top := filepath.Clean(strings.TrimSpace(string(out)))
-	if len(top) <= len(dir) && strings.EqualFold(dir[:len(top)], top) {
-		// Spelled as the folder is, which on Windows may differ in case, so
-		// that the paths of git are those of the explorer.
-		top = dir[:len(top)]
-	}
+	top := rootAs(filepath.Clean(dir), filepath.Clean(strings.TrimSpace(string(out))))
 	r := &Repo{Root: top}
 	out, err = Run(r.Root, "status", "--porcelain=v2", "--branch", "-z", "--untracked-files=all")
 	if err != nil {
@@ -184,4 +180,41 @@ func (r *Repo) Show(rev, path string) (string, bool) {
 func (r *Repo) Tracked(path string) bool {
 	_, err := Run(r.Root, "ls-files", "--error-unmatch", "--", r.Rel(path))
 	return err == nil
+}
+
+// rootAs spells top, the root of a repository as git names it, as the folder
+// dir inside it is spelled, so that the paths of git are those of the
+// explorer. On Windows they may differ in case, and dir may name a folder by
+// its short name, as C:\Users\RUNNER~1, where git gives the long one.
+func rootAs(dir, top string) string {
+	if p, ok := prefixAs(dir, top); ok {
+		return p
+	}
+	long, err := filepath.EvalSymlinks(dir)
+	if err != nil {
+		return top
+	}
+	long = filepath.Clean(long)
+	if _, ok := prefixAs(long, top); !ok {
+		return top
+	}
+	// The part of the folder below the root, as the long name spells it,
+	// ends dir too, as the short names are of the folders above it.
+	below := long[len(top):]
+	if len(below) <= len(dir) && strings.EqualFold(dir[len(dir)-len(below):], below) {
+		return dir[:len(dir)-len(below)]
+	}
+	return top
+}
+
+// prefixAs returns the start of path that is the folder root, spelled as
+// path spells it, when root holds path or is it.
+func prefixAs(path, root string) (string, bool) {
+	if len(root) > len(path) || !strings.EqualFold(path[:len(root)], root) {
+		return "", false
+	}
+	if len(path) > len(root) && !os.IsPathSeparator(path[len(root)]) && !os.IsPathSeparator(root[len(root)-1]) {
+		return "", false
+	}
+	return path[:len(root)], true
 }

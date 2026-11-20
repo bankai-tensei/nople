@@ -117,9 +117,15 @@ func Locale() language.Tag {
 	return current.locale
 }
 
-// systemLanguage is the catalog closest to the language of the OS.
+// systemLanguage is the catalog closest to the language of the OS, or the
+// one NOPLE_LANG names, as "ja" or "en", which stands in for the OS.
 func systemLanguage() string {
 	loadCatalogs()
+	if id := os.Getenv("NOPLE_LANG"); id != "" {
+		if _, ok := catalogs.all[id]; ok {
+			return id
+		}
+	}
 	tags := make([]language.Tag, 0, len(catalogs.ids))
 	for _, id := range catalogs.ids {
 		tags = append(tags, catalogs.all[id].locale)
