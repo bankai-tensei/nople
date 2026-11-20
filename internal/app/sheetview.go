@@ -203,11 +203,11 @@ func (a *app) cellEditor(th *theme.Theme, t *tab, e *sheetEdit, title string, st
 				Value: e.text, Controller: &e.input, Label: title, HideLabel: true, Bare: true, Autofocus: true, Style: st,
 				OnChange: func(s string) { e.text = s },
 				OnSubmit: func(s string) { e.text = s; a.endCellEdit(t, e, true) },
-				Extras: field.Extras{OnFocus: func(focused bool) {
+				OnFocus: func(focused bool) {
 					if !focused {
 						a.endCellEdit(t, e, true)
 					}
-				}},
+				},
 			}},
 		}},
 	}
@@ -233,8 +233,8 @@ func (a *app) endCellEdit(t *tab, e *sheetEdit, keep bool) {
 	d := t.doc
 	s := d.sheet
 	if keep && s != nil && d.canEdit() && !d.saving() && e.idx < len(s.rows) && e.text != s.rows[e.idx][e.col] {
-		start, end, text := s.fieldEdit(e.idx, e.col, e.text)
-		d.ctrl.Replace(editor.TextRange{Start: d.ctrl.PositionAt(start), End: d.ctrl.PositionAt(end)}, text)
+		start, end, repl := s.fieldEdit(e.idx, e.col, e.text)
+		d.ctrl.Replace(editor.TextRange{Start: d.ctrl.PositionAt(start), End: d.ctrl.PositionAt(end)}, repl)
 		a.edited(d)
 		a.refill(d)
 		return
