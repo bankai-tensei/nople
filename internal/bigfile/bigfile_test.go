@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -156,18 +157,26 @@ func TestOpen_IndexesInStepsAndGrows(t *testing.T) {
 	content := numbered(2000)
 	u := newUI()
 	var ctl editor.Controller
-	steps := 0
+	// The indexing goroutine posts once a step; how many of the posts one
+	// pass of the UI takes together depends on how far it got, so the steps
+	// are counted where they are posted and not in OnLoad.
+	var posts atomic.Int32
+	post := func(fn func()) { posts.Add(1); u.post(fn) }
+	loads := 0
 	var last [2]int64
-	d := open(t, &ctl, writeFile(t, content), Options{Post: u.post, OnLoad: func(loaded, size int64) {
-		steps++
+	d := open(t, &ctl, writeFile(t, content), Options{Post: post, OnLoad: func(loaded, size int64) {
+		loads++
 		last = [2]int64{loaded, size}
 	}})
 	if !d.Loading() || ctl.LineCount() >= 2001 {
 		t.Fatalf("the file must still be loading, with %d lines so far", ctl.LineCount())
 	}
 	u.pump(t, "the end of the index", func() bool { return !d.Loading() })
-	if steps < 3 || last[0] != last[1] || last[1] != int64(len(content)) {
-		t.Errorf("OnLoad ran %d times, last with %v", steps, last)
+	if n := posts.Load(); n < 3 {
+		t.Errorf("the index came in %d steps", n)
+	}
+	if loads < 1 || last[0] != last[1] || last[1] != int64(len(content)) {
+		t.Errorf("OnLoad ran %d times, last with %v", loads, last)
 	}
 	checkSource(t, d.File(), content)
 	if ctl.Text() != content {
