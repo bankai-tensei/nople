@@ -4,8 +4,8 @@ go 1.27.3
 
 require (
 	github.com/alecthomas/chroma/v2 v2.27.0
-	github.com/bankai-tensei/gowaku v0.2.0
-	github.com/bankai-tensei/gowaku/markdown v0.2.0
+	github.com/bankai-tensei/gowaku v0.2.1
+	github.com/bankai-tensei/gowaku/markdown v0.2.1
 	github.com/ebitengine/purego v0.11.3
 	github.com/fsnotify/fsnotify v1.9.0
 	golang.org/x/image v0.47.0

@@ -6,7 +6,8 @@ All notable changes to Nople are recorded here. The format follows [Keep a Chang
 
 ### Changed
 
-- Nople builds on gowaku v0.2.0. The folder dialog opens in front of Nople's window.
+- Nople builds on gowaku v0.2.1. The folder dialog opens in front of Nople's window, and on Linux the numeric keypad types digits with Num Lock on.
+- Windows: Nople no longer puts itself among the programs that open `.bat` and `.cmd` files, and registering takes out what an earlier version put there. With Nople among them, a double-click on a batch file asked which program to open it with instead of running it.
 
 ### Added
 

@@ -26,6 +26,10 @@ const (
 	legacyProgID = "Nople.File"
 )
 
+// dropped are the extensions that an earlier version offered to open and
+// this one does not; Register and Unregister take Nople out of them.
+var dropped = []string{".bat", ".cmd"}
+
 // menus are the context menus that get "Open with Nople", and what of the
 // clicked thing the command gets: %V is the folder, also when the menu is
 // that of the inside of a folder, and %1 the file.
@@ -116,14 +120,26 @@ func IconFile(dir, ext string) string {
 	return filepath.Join(dir, name+".ico")
 }
 
-// cleanLegacy takes out the one ProgID of all the extensions that earlier
-// versions registered.
+// cleanLegacy takes out what earlier versions registered and this one does
+// not: the one ProgID of all the extensions, and Nople from the extensions
+// it dropped.
 func cleanLegacy() {
-	// What is left of an earlier version does no harm, so a key that will not
-	// go is left.
+	// What is left of an earlier version mostly does no harm, so a key that
+	// will not go is left.
 	_ = deleteTree(classes + legacyProgID) //nolint:errcheck // see above
 	for _, ext := range Extensions {
 		_ = deleteValue(classes+ext+`\OpenWithProgids`, legacyProgID) //nolint:errcheck // see above
+	}
+	for _, ext := range dropped {
+		id := progIDOf(ext)
+		_ = deleteTree(classes + id)                      //nolint:errcheck // see above
+		_ = deleteValue(appKey+`\SupportedTypes`, ext)    //nolint:errcheck // see above
+		_ = deleteValue(capsKey+`\FileAssociations`, ext) //nolint:errcheck // see above
+		for _, v := range []string{id, legacyProgID} {
+			_ = deleteValue(classes+ext+`\OpenWithProgids`, v) //nolint:errcheck // see above
+		}
+		deleteIfEmpty(classes + ext + `\OpenWithProgids`)
+		deleteIfEmpty(classes + ext)
 	}
 }
 
@@ -142,7 +158,7 @@ func Unregister() error {
 	for _, id := range ids {
 		errs = append(errs, deleteTree(classes+id))
 	}
-	for _, ext := range Extensions {
+	for _, ext := range append(append([]string{}, Extensions...), dropped...) {
 		for _, id := range []string{progIDOf(ext), legacyProgID} {
 			errs = append(errs, deleteValue(classes+ext+`\OpenWithProgids`, id))
 		}
