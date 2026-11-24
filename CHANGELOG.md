@@ -4,6 +4,8 @@ All notable changes to Nople are recorded here. The format follows [Keep a Chang
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-25
+
 ### Changed
 
 - Nople builds on gowaku v0.2.1. The folder dialog opens in front of Nople's window, and on Linux the numeric keypad types digits with Num Lock on.
@@ -17,5 +19,6 @@ All notable changes to Nople are recorded here. The format follows [Keep a Chang
 
 The first public release, for Windows, Linux and macOS (Apple silicon).
 
-[Unreleased]: https://github.com/bankai-tensei/nople/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/bankai-tensei/nople/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/bankai-tensei/nople/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/bankai-tensei/nople/releases/tag/v1.0.0
