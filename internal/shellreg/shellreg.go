@@ -20,7 +20,10 @@ type Labels struct {
 	TypeName func(ext string) string
 }
 
-// Extensions are the extensions Nople offers to open, with their dot.
+// Extensions are the extensions Nople offers to open, with their dot. The
+// batch files .bat and .cmd are not among them: Explorer runs them on a
+// double-click, and a second program among those that open them makes it
+// ask which one to use instead.
 var Extensions = []string{
 	".txt", ".md", ".markdown", ".log", ".csv", ".tsv",
 	".json", ".jsonc", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf", ".env", ".properties", ".xml",
@@ -29,7 +32,7 @@ var Extensions = []string{
 	".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".jsx", ".tsx", ".vue", ".svelte",
 	".html", ".htm", ".css", ".scss", ".sass", ".less",
 	".c", ".h", ".cpp", ".cc", ".cxx", ".hpp", ".hh", ".cs", ".java", ".kt", ".kts", ".scala", ".swift", ".dart", ".rs", ".zig",
-	".sh", ".bash", ".zsh", ".fish", ".ps1", ".psm1", ".bat", ".cmd",
+	".sh", ".bash", ".zsh", ".fish", ".ps1", ".psm1",
 	".sql", ".graphql", ".proto", ".gradle", ".cmake", ".mk",
 	".gitignore", ".gitattributes", ".editorconfig",
 }
