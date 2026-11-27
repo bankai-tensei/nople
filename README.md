@@ -176,6 +176,18 @@ cd Nople && go build -ldflags="-H windowsgui" .
 
 `-ldflags="-H windowsgui"` keeps a console window from opening on Windows; leave it out on other systems. The icon of `nople.exe` is linked in from the committed `rsrc_windows_amd64.syso`. To rebuild it after changing `assets/icon.ico`, run `go generate` (needs `windres` from MinGW or TDM-GCC).
 
+You can also install it without cloning. On Windows, add the same `-ldflags`.
+
+```bash
+go install github.com/bankai-tensei/nople@latest
+```
+
+Nople uses no cgo, so it cross-compiles with `GOOS` and `GOARCH`. This builds the Windows one from Linux or macOS:
+
+```bash
+GOOS=windows GOARCH=amd64 go build -ldflags="-H windowsgui" .
+```
+
 To work on gowaku and Nople together, clone gowaku beside Nople and make a `go.work` in Nople (it is ignored by git):
 
 ```bash

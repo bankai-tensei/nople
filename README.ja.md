@@ -176,6 +176,18 @@ cd Nople && go build -ldflags="-H windowsgui" .
 
 `-ldflags="-H windowsgui"` は Windows でコンソールのウィンドウを出さないためのもので、ほかの OS では要りません。`nople.exe` のアイコンは、リポジトリにある `rsrc_windows_amd64.syso` から取り込まれます。`assets/icon.ico` を変えたら `go generate` で作り直します（MinGW か TDM-GCC の `windres` が要ります）。
 
+clone せずに入れることもできます。Windows では同じ `-ldflags` を付けます。
+
+```bash
+go install github.com/bankai-tensei/nople@latest
+```
+
+cgo を使っていないので、`GOOS` と `GOARCH` を指定すればほかの OS 向けにビルドできます。次は Linux や macOS から Windows 向けにビルドする例です。
+
+```bash
+GOOS=windows GOARCH=amd64 go build -ldflags="-H windowsgui" .
+```
+
 gowaku と一緒に手を入れるときは、gowaku を Nople の隣に clone し、Nople に `go.work` を作ります（git には入りません）。
 
 ```bash
